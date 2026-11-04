@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Koda – Calculadora de presupuestos</title>
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7F7F7">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#070707">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Koda Presup.">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{--bg:#F7F7F7;--fg:#1D1D1F;--mut:rgba(29,29,31,.6);--card:rgba(255,255,255,.62);--bd:rgba(255,255,255,.85);--in:rgba(0,0,0,.05);--acc:#26A699;--gold:#C79C5A;--red:#E5484D}
+@media(prefers-color-scheme:dark){:root{--bg:#070707;--fg:#F5F5F7;--mut:rgba(245,245,247,.6);--card:rgba(40,40,44,.55);--bd:rgba(255,255,255,.14);--in:rgba(255,255,255,.08)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100dvh;overflow-x:hidden;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif}
+body:before{content:"";position:fixed;inset:-20%;z-index:-1;background:radial-gradient(40% 30% at 20% 10%,rgba(38,166,153,.18),transparent),radial-gradient(40% 30% at 85% 30%,rgba(199,156,90,.16),transparent)}
+#app{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 14px) calc(env(safe-area-inset-right) + 14px) calc(env(safe-area-inset-bottom) + 30px) calc(env(safe-area-inset-left) + 14px)}
+header{display:flex;align-items:center;gap:8px;margin-bottom:12px}header h1{flex:1;font-size:22px;margin:0}header small{display:block;font-size:12px;color:var(--gold);font-weight:600}
+.ib{border:none;background:var(--card);color:var(--fg);width:44px;height:44px;border-radius:14px;font-size:20px;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:16px;margin-bottom:12px;backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);box-shadow:0 10px 30px rgba(0,0,0,.08);animation:up .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes up{from{opacity:0;transform:translateY(12px)}}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin:0 0 10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:48px;flex-wrap:wrap}.row>span{flex:1;min-width:0;font-size:16px}.row>span i{display:block;font-style:normal;font-size:12px;color:var(--mut)}
+.st{display:flex;align-items:center;background:var(--in);border-radius:14px}.st button{border:none;background:none;color:var(--acc);font-size:24px;width:44px;height:44px}.st input{width:56px;text-align:center;border:none;background:none;color:var(--fg);font-size:17px;font-weight:600}
+.seg{display:flex;background:var(--in);border-radius:12px;padding:3px;width:100%}.seg button{flex:1;border:none;background:none;color:var(--fg);font-size:14px;padding:10px 4px;border-radius:10px;transition:.25s}.seg button.on{background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.12);font-weight:600}
+.sw{position:relative;width:51px;height:31px;flex:none}.sw input{opacity:0;position:absolute;inset:0;margin:0;z-index:1}.sw b{position:absolute;inset:0;border-radius:31px;background:var(--in);transition:.3s}.sw b:after{content:"";position:absolute;left:2px;top:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.25);transition:.3s cubic-bezier(.2,.8,.2,1)}.sw input:checked+b{background:var(--acc)}.sw input:checked+b:after{transform:translateX(20px)}
+.sub{padding-left:10px;border-left:2px solid var(--gold);margin:4px 0 8px}
+input.n{width:96px;font-size:16px;padding:10px;border-radius:12px;border:none;background:var(--in);color:var(--fg);text-align:right}
+input.t{width:100%;font-size:16px;padding:12px;border-radius:12px;border:none;background:var(--in);color:var(--fg)}
+.btn{width:100%;border:none;border-radius:16px;padding:15px;font-size:17px;font-weight:600;background:var(--acc);color:#fff;margin-top:8px}.btn.g{background:var(--in);color:var(--acc)}
+.vid{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--in)}.vid div{flex:1;min-width:0}.vid b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vid i{font-style:normal;font-size:13px;color:var(--mut)}.vid button{border:none;background:none;font-size:18px;width:40px;height:40px;color:var(--red)}
+.big{font-size:40px;font-weight:700;letter-spacing:-.02em;color:var(--acc)}
+.kp{display:flex;gap:10px;margin-top:10px}.kp div{flex:1;background:var(--in);border-radius:14px;padding:10px}.kp small{color:var(--mut);font-size:12px}.kp b{display:block;font-size:19px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px;table-layout:fixed}td{padding:7px 2px;border-bottom:1px solid var(--in);word-wrap:break-word}td:nth-child(2){width:28%;color:var(--mut)}td:last-child{text-align:right;width:28%;font-variant-numeric:tabular-nums}
+.note{font-size:12px;color:var(--mut);margin:4px 0}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:.3s;z-index:50}.ov.on{opacity:1;pointer-events:auto}
+.sh{position:fixed;left:0;right:0;bottom:0;max-height:88dvh;overflow-y:auto;overflow-x:hidden;z-index:60;background:var(--card);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border-radius:24px 24px 0 0;padding:10px 16px calc(env(safe-area-inset-bottom) + 18px);transform:translateY(105%);transition:transform .42s cubic-bezier(.2,.9,.2,1),visibility 0s .42s;visibility:hidden;max-width:640px;margin:0 auto}
+@media(prefers-color-scheme:light){.sh{background:rgba(250,250,250,.92)}}@media(prefers-color-scheme:dark){.sh{background:rgba(28,28,30,.94)}}
+.sh.on{transform:none;visibility:visible;transition:transform .42s cubic-bezier(.2,.9,.2,1)}.sh:before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--mut);opacity:.4;margin:0 auto 12px}.sh h3{margin:0 0 10px;font-size:20px}
+#ok{position:fixed;left:50%;top:40%;width:120px;height:120px;margin:-60px;border-radius:30px;background:var(--card);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);z-index:90;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.8);transition:.3s;pointer-events:none;flex-direction:column;font-size:13px}
+#ok.on{opacity:1;transform:none}#ok path{stroke-dasharray:50;stroke-dashoffset:50}#ok.on path{animation:ck .45s .1s forwards}@keyframes ck{to{stroke-dashoffset:0}}
+</style></head><body><div id="app">
+<header><div style="flex:1"><small>KODA STUDIO</small><h1>Presupuestos</h1></div><button class="ib" id="mute" aria-label="Sonido">🔊</button><button class="ib" onclick="openSh('cfg')" aria-label="Ajustes">⚙️</button></header>
+
+<div class="card"><h2>🎬 Videos</h2><div id="vids"></div><button class="btn g" onclick="newVid()">＋ Agregar video</button></div>
+
+<div class="card"><h2>🎥 Rodaje</h2>
+<div class="row"><span>Horas de rodaje<i>por día</i></span><div class="st" data-k="horas" data-s="1"></div></div>
+<div class="row"><span>Días de rodaje</span><div class="st" data-k="dias" data-s="1"></div></div>
+<div class="row"><span>Alquiler de equipos<i>por hora de rodaje</i></span><label class="sw"><input type="checkbox" data-k="equipos"><b></b></label></div>
+<div class="row"><span>Asistente<i>por hora de rodaje</i></span><label class="sw"><input type="checkbox" data-k="asis"><b></b></label></div>
+<div class="row"><span>Voz en off (Natán)</span><label class="sw"><input type="checkbox" data-k="voz"><b></b></label></div>
+<div class="sub" data-if="voz"><div class="row"><span>Horas de voz</span><div class="st" data-k="vozH" data-s="0.5"></div></div></div>
+<div class="row"><span>Movilidad local</span><label class="sw"><input type="checkbox" data-k="mov"><b></b></label></div>
+<div class="sub" data-if="mov"><div class="seg" data-k="movT"><button data-v="carro">🚗 Carro</button><button data-v="moto">🛵 Moto</button></div></div>
+</div>
+
+<div class="card"><h2>📍 Ubicación</h2>
+<div class="seg" data-k="ubic"><button data-v="pucallpa">Pucallpa</button><button data-v="lima">Lima</button><button data-v="otra">Otra ciudad</button></div>
+<div data-if="viaje" style="margin-top:8px">
+<div class="row"><span>Personas que viajan</span><div class="st" data-k="pers" data-s="1"></div></div>
+<div class="row"><span>Pasaje ida y vuelta<i>S/ por persona · estimado editable</i></span><input class="n" type="number" inputmode="decimal" data-k="pasaje"></div>
+<div class="row"><span>Noches de hospedaje</span><div class="st" data-k="noches" data-s="1"></div></div>
+<div class="row"><span>Hospedaje por noche<i data-lima>S/ por persona · Franco: Magdalena</i></span><input class="n" type="number" inputmode="decimal" data-k="hosp"></div>
+<div class="row"><span>Viáticos por día<i>S/ por persona</i></span><input class="n" type="number" inputmode="decimal" data-k="viat"></div>
+<div class="row"><span>Transporte local destino<i>S/ por día</i></span><input class="n" type="number" inputmode="decimal" data-k="tlocal"></div>
+<div class="row"><span>Margen sobre viaje %</span><input class="n" type="number" inputmode="decimal" data-k="margenV"></div>
+<p class="note">Los gastos de viaje se cobran al costo + margen. Días de viaje = días de rodaje.</p></div></div>
+
+<div class="card"><h2>💸 Ajustes finales</h2>
+<div class="row"><span>Descuento %</span><input class="n" type="number" inputmode="decimal" data-k="desc"></div>
+<div class="row"><span>Incluir IGV (18%)</span><label class="sw"><input type="checkbox" data-k="igv"><b></b></label></div></div>
+
+<div class="card" id="res"></div>
+<button class="btn" id="copy">📋 Copiar resumen</button>
+<button class="btn g" onclick="if(confirm('¿Empezar un presupuesto nuevo?')){Q=JSON.parse(JSON.stringify(DQ));render()}">Nuevo presupuesto</button>
+</div>
+
+<div class="ov" id="ov" onclick="closeSh()"></div>
+<div class="sh" id="vidSh"><h3 id="vt">Video</h3>
+<input class="t" id="vn" placeholder="Nombre (ej. Reel promocional)">
+<p class="note">Tipo de duración</p><div class="seg" id="vtipo"><button data-v="reel">Reel corto</button><button data-v="1min">1 min</button><button data-v="2min">2 min+</button></div>
+<div class="row"><span>Cantidad</span><div class="st" id="vq"></div></div>
+<div class="row"><span>Horas de edición<i>por video</i></span><div class="st" id="vh"></div></div>
+<button class="btn" id="vsave">Guardar video</button><button class="btn g" onclick="closeSh()">Cancelar</button></div>
+
+<div class="sh" id="cfg"><h3>⚙️ Ajustes</h3><div id="cfgBody"></div><button class="btn" onclick="closeSh();render();done('Guardado')">Listo</button>
+<button class="btn g" onclick="if(confirm('¿Restaurar valores por defecto?')){C=Object.assign({},DC);buildCfg();render()}">Restaurar valores</button></div>
+<div id="ok"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="25" fill="var(--acc)"/><path d="M15 28l8 8 16-17" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="okT" style="margin-top:6px"></span></div>
+
+<script>
+const DC={pRod:100,pEd:100,pEdMin:60,pEq:100,pAs:25,pCarro:50,pMoto:10,pVoz:100,edReel:4,ed1:6,ed2:12,
+cAs:25,cVoz:70,cCarro:50,cMoto:10,desgaste:20,cEd:0,cRod:0,
+pasLima:400,pasOtra:300,hospLima:120,hospOtra:100,viat:40,tLima:60,tOtra:40,margenV:0};
+const LBL=[["Tarifas al cliente (S/)"],["pRod","Rodaje por hora"],["pEd","Edición por hora"],["pEdMin","Edición mínimo por video"],["pEq","Equipos por hora de rodaje"],["pAs","Asistente por hora"],["pCarro","Movilidad carro por día"],["pMoto","Movilidad moto por día"],["pVoz","Voz en off por hora"],
+["Horas de edición por defecto"],["edReel","Reel corto"],["ed1","Video 1 min"],["ed2","Video 2 min+"],
+["Costos internos (inversión)"],["cAs","Pago asistente por hora"],["cVoz","Pago Natán por hora"],["cCarro","Costo carro por día"],["cMoto","Costo moto por día"],["desgaste","Desgaste equipos (% del cobro)"],["cEd","Costo edición/equipo por hora (0 = Franco)"],["cRod","Costo rodaje por hora (0 = Franco)"],
+["Viajes (estimados editables)"],["pasLima","Pasaje Pucallpa–Lima i/v"],["pasOtra","Pasaje otra ciudad i/v"],["hospLima","Hospedaje Lima / noche (Magdalena)"],["hospOtra","Hospedaje otra ciudad / noche"],["viat","Viáticos por día/persona"],["tLima","Transporte local Lima / día"],["tOtra","Transporte local otra ciudad / día"],["margenV","Margen sobre viaje %"]];
+const DQ={vids:[{n:"Reel",t:"reel",q:1,h:4}],horas:4,dias:1,equipos:true,asis:false,voz:false,vozH:1,mov:false,movT:"carro",ubic:"pucallpa",pers:1,pasaje:400,noches:1,hosp:120,viat:40,tlocal:60,margenV:0,desc:0,igv:false};
+const TN={reel:"Reel corto","1min":"1 min","2min":"2 min+"};
+let C=Object.assign({},DC,JSON.parse(localStorage.kodaCfg||"{}"));
+let Q=Object.assign(JSON.parse(JSON.stringify(DQ)),JSON.parse(localStorage.kodaQuote||"{}"));
+let muted=localStorage.kodaMute==="1";
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const S=n=>"S/ "+Math.round(n).toLocaleString("en-US");
+function stepper(el,get,set,step,min){el.innerHTML='<button aria-label="Menos">−</button><input type="number" inputmode="decimal"><button aria-label="Más">＋</button>';const[a,i,b]=el.children;const sh=()=>i.value=get();
+a.onclick=()=>{set(Math.max(min,+(get()-step).toFixed(2)));sh()};b.onclick=()=>{set(+(get()+step).toFixed(2));sh()};i.onchange=()=>{set(Math.max(min,+i.value||0));sh()};el.sync=sh;sh()}
+$$(".st[data-k]").forEach(el=>{const k=el.dataset.k;stepper(el,()=>Q[k],v=>{Q[k]=v;render()},+el.dataset.s,k=="dias"||k=="pers"?1:0)});
+$$("input[data-k]:not(.n)").forEach(e=>e.onchange=()=>{Q[e.dataset.k]=e.checked;render()});
+$$("input.n[data-k]").forEach(e=>e.oninput=()=>{Q[e.dataset.k]=+e.value||0;render(1)});
+$$(".seg[data-k]").forEach(s=>s.onclick=e=>{const v=e.target.dataset.v;if(!v)return;const k=s.dataset.k;if(k=="ubic"&&v!=Q.ubic){const l=v=="lima";Q.pasaje=l?C.pasLima:C.pasOtra;Q.hosp=l?C.hospLima:C.hospOtra;Q.viat=C.viat;Q.tlocal=l?C.tLima:C.tOtra;Q.margenV=C.margenV;Q.noches=Math.max(1,Q.dias)}Q[k]=v;render()});
+function calc(){const L=[];let inv=0;const H=Q.horas*Q.dias;
+L.push(["Rodaje",H+" h",H*C.pRod]);inv+=H*C.cRod;
+Q.vids.forEach(v=>{const p=Math.max(C.pEdMin,v.h*C.pEd)*v.q;L.push(["Edición · "+v.n+" ("+TN[v.t]+")",v.q+" × "+v.h+" h",p]);inv+=v.h*v.q*C.cEd});
+if(Q.equipos){const p=H*C.pEq;L.push(["Alquiler de equipos",H+" h",p]);inv+=p*C.desgaste/100}
+if(Q.asis){L.push(["Asistente",H+" h",H*C.pAs]);inv+=H*C.cAs}
+if(Q.voz){L.push(["Voz en off (Natán)",Q.vozH+" h",Q.vozH*C.pVoz]);inv+=Q.vozH*C.cVoz}
+if(Q.mov){const c=Q.movT=="carro";L.push(["Movilidad ("+(c?"carro":"moto")+")",Q.dias+" día(s)",Q.dias*(c?C.pCarro:C.pMoto)]);inv+=Q.dias*(c?C.cCarro:C.cMoto)}
+if(Q.ubic!="pucallpa"){const m=1+Q.margenV/100,P=Q.pers,D=Q.dias;
+[["Pasajes i/v",P+" × "+S(Q.pasaje),P*Q.pasaje],["Hospedaje",P+"p × "+Q.noches+" n",P*Q.noches*Q.hosp],["Viáticos",P+"p × "+D+" d",P*D*Q.viat],["Transporte local",D+" d",D*Q.tlocal]].forEach(r=>{inv+=r[2];L.push([r[0],r[1],r[2]*m])})}
+const sub=L.reduce((a,r)=>a+r[2],0),d=sub*Q.desc/100,base=sub-d,igv=Q.igv?base*.18:0,tot=base+igv,g=base-inv;
+return{L,sub,d,igv,tot,inv,g,mg:base?g/base*100:0}}
+function render(skipInputs){const r=calc();localStorage.kodaQuote=JSON.stringify(Q);localStorage.kodaCfg=JSON.stringify(C);
+Q.viaje=Q.ubic!="pucallpa";
+if(!skipInputs){$$(".st[data-k]").forEach(e=>e.sync());$$("input[data-k]:not(.n)").forEach(e=>e.checked=!!Q[e.dataset.k]);$$("input.n[data-k]").forEach(e=>e.value=Q[e.dataset.k]);
+$$(".seg[data-k] button").forEach(b=>b.classList.toggle("on",Q[b.parentNode.dataset.k]==b.dataset.v));$$("[data-if]").forEach(e=>e.style.display=Q[e.dataset.if]?"":"none");
+$("#vids").innerHTML=Q.vids.length?Q.vids.map((v,i)=>`<div class="vid"><div onclick="editVid(${i})"><b>${v.q}× ${esc(v.n)}</b><i>${TN[v.t]} · ${v.h} h edición c/u</i></div><button onclick="editVid(${i})" style="color:var(--acc)">✎</button><button onclick="Q.vids.splice(${i},1);render()" aria-label="Eliminar">✕</button></div>`).join(""):'<p class="note">Aún no hay videos.</p>'}
+$("#res").innerHTML=`<h2>Precio al cliente</h2><div class="big">${S(r.tot)}</div>${Q.igv?'<p class="note">Incluye IGV '+S(r.igv)+'</p>':''}
+<div class="kp"><div><small>Inversión</small><b>${S(r.inv)}</b></div><div><small>Ganancia</small><b style="color:${r.g<0?'var(--red)':'var(--acc)'}">${S(r.g)}</b><small>${r.mg.toFixed(0)}% margen</small></div></div>
+<table><tr><td><b>Concepto</b></td><td>Cant.</td><td><b>Precio</b></td></tr>${r.L.map(l=>`<tr><td>${esc(l[0])}</td><td>${l[1]}</td><td>${S(l[2])}</td></tr>`).join("")}
+${r.d?`<tr><td>Descuento ${Q.desc}%</td><td></td><td>−${S(r.d)}</td></tr>`:""}${Q.igv?`<tr><td>IGV 18%</td><td></td><td>${S(r.igv)}</td></tr>`:""}<tr><td><b>Total</b></td><td></td><td><b>${S(r.tot)}</b></td></tr></table>`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>"&#"+c.charCodeAt(0)+";");
+let ed=-1,tmp={n:"",t:"reel",q:1,h:4};function vidSh(){$("#vn").value=tmp.n;$$("#vtipo button").forEach(b=>b.classList.toggle("on",b.dataset.v==tmp.t));$("#vq").sync();$("#vh").sync()}
+stepper($("#vq"),()=>tmp.q,v=>tmp.q=v,1,1);stepper($("#vh"),()=>tmp.h,v=>tmp.h=v,.5,0);
+$("#vtipo").onclick=e=>{const v=e.target.dataset.v;if(!v)return;tmp.t=v;tmp.h={reel:C.edReel,"1min":C.ed1,"2min":C.ed2}[v];vidSh()};
+function newVid(){ed=-1;tmp={n:"",t:"reel",q:1,h:C.edReel};$("#vt").textContent="Nuevo video";vidSh();openSh("vidSh")}
+function editVid(i){ed=i;tmp=Object.assign({},Q.vids[i]);$("#vt").textContent="Editar video";vidSh();openSh("vidSh")}
+$("#vsave").onclick=()=>{tmp.n=$("#vn").value.trim()||"Video "+TN[tmp.t];ed<0?Q.vids.push(tmp):Q.vids[ed]=tmp;closeSh();render();done("Video guardado")};
+function buildCfg(){$("#cfgBody").innerHTML=LBL.map(l=>l.length==1?`<h2 style="margin-top:14px">${l[0]}</h2>`:`<div class="row"><span>${l[1]}</span><input class="n" type="number" inputmode="decimal" value="${C[l[0]]}" oninput="C['${l[0]}']=+this.value||0;render(1)"></div>`).join("")}buildCfg();
+function openSh(id){$("#ov").classList.add("on");$("#"+id).classList.add("on")}function closeSh(){$("#ov").classList.remove("on");$$(".sh").forEach(s=>s.classList.remove("on"))}
+let AC;function ding(){if(muted)return;try{AC=AC||new(window.AudioContext||webkitAudioContext)();[880,1318.5].forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+i*.11;o.frequency.value=f;o.type="sine";g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.15,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.35);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+.4)})}catch(e){}}
+function done(t){$("#okT").textContent=t;const o=$("#ok");o.classList.remove("on");void o.offsetWidth;o.classList.add("on");ding();setTimeout(()=>o.classList.remove("on"),1300)}
+const mb=$("#mute");mb.textContent=muted?"🔇":"🔊";mb.onclick=()=>{muted=!muted;localStorage.kodaMute=muted?"1":"0";mb.textContent=muted?"🔇":"🔊"};
+function texto(){const r=calc(),u={pucallpa:"Pucallpa",lima:"Lima",otra:"Otra ciudad"}[Q.ubic];
+return `🎬 *Presupuesto – Koda Studio*\n📍 ${u} · 🎥 ${Q.dias} día(s), ${Q.horas} h de rodaje/día\n\n`+(Q.vids.length?"🎞️ *Videos:*\n"+Q.vids.map(v=>`• ${v.q}× ${v.n} (${TN[v.t]})`).join("\n")+"\n\n":"")+
+"🧾 *Detalle:*\n"+r.L.map(l=>`• ${l[0]} (${l[1]}): ${S(l[2])}`).join("\n")+(r.d?`\n• Descuento ${Q.desc}%: −${S(r.d)}`:"")+(Q.igv?`\n• IGV 18%: ${S(r.igv)}`:"")+`\n\n💰 *Total: ${S(r.tot)}*${Q.igv?"":" (no incluye IGV)"}\n\n¡Gracias por confiar en Koda Studio! 🙌`}
+$("#copy").onclick=async()=>{const t=texto();try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}done("¡Copiado!")};
+render();
+</script></body></html>
