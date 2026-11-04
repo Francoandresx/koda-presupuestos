@@ -59,13 +59,14 @@ table{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px;table-l
 <div class="seg" data-k="ubic"><button data-v="pucallpa">Pucallpa</button><button data-v="lima">Lima</button><button data-v="otra">Otra ciudad</button></div>
 <div data-if="viaje" style="margin-top:8px">
 <div class="row"><span>Personas que viajan</span><div class="st" data-k="pers" data-s="1"></div></div>
+<div class="row"><span>Días en la ciudad<i>viáticos y transporte local</i></span><div class="st" data-k="diasCiudad" data-s="1"></div></div>
 <div class="row"><span>Pasaje ida y vuelta<i>S/ por persona · estimado editable</i></span><input class="n" type="number" inputmode="decimal" data-k="pasaje"></div>
 <div class="row"><span>Noches de hospedaje</span><div class="st" data-k="noches" data-s="1"></div></div>
 <div class="row"><span>Hospedaje por noche<i data-lima>S/ por persona · Franco: Magdalena</i></span><input class="n" type="number" inputmode="decimal" data-k="hosp"></div>
 <div class="row"><span>Viáticos por día<i>S/ por persona</i></span><input class="n" type="number" inputmode="decimal" data-k="viat"></div>
 <div class="row"><span>Transporte local destino<i>S/ por día</i></span><input class="n" type="number" inputmode="decimal" data-k="tlocal"></div>
 <div class="row"><span>Margen sobre viaje %</span><input class="n" type="number" inputmode="decimal" data-k="margenV"></div>
-<p class="note">Los gastos de viaje se cobran al costo + margen. Días de viaje = días de rodaje.</p></div></div>
+<p class="note">Los gastos de viaje se cobran al costo + margen. Viáticos y transporte local usan los días en la ciudad. El hospedaje empieza en un día menos (mínimo 1 noche) hasta que lo edites.</p></div></div>
 
 <div class="card"><h2>💸 Ajustes finales</h2>
 <div class="row"><span>Descuento %</span><input class="n" type="number" inputmode="decimal" data-k="desc"></div>
@@ -96,19 +97,23 @@ const LBL=[["Tarifas al cliente (S/)"],["pRod","Rodaje por hora"],["pEd","Edici�
 ["Horas de edición por defecto"],["edReel","Reel corto"],["ed1","Video 1 min"],["ed2","Video 2 min+"],
 ["Costos internos (inversión)"],["cAs","Pago asistente por hora"],["cVoz","Pago Natán por hora"],["cCarro","Costo carro por día"],["cMoto","Costo moto por día"],["desgaste","Desgaste equipos (% del cobro)"],["cEd","Costo edición/equipo por hora (0 = Franco)"],["cRod","Costo rodaje por hora (0 = Franco)"],
 ["Viajes (estimados editables)"],["pasLima","Pasaje Pucallpa–Lima i/v"],["pasOtra","Pasaje otra ciudad i/v"],["hospLima","Hospedaje Lima / noche (Magdalena)"],["hospOtra","Hospedaje otra ciudad / noche"],["viat","Viáticos por día/persona"],["tLima","Transporte local Lima / día"],["tOtra","Transporte local otra ciudad / día"],["margenV","Margen sobre viaje %"]];
-const DQ={vids:[{n:"Reel",t:"reel",q:1,h:4}],horas:4,dias:1,equipos:true,asis:false,voz:false,vozH:1,mov:false,movT:"carro",ubic:"pucallpa",pers:1,pasaje:400,noches:1,hosp:120,viat:40,tlocal:60,margenV:0,desc:0,igv:false};
+const DQ={vids:[{n:"Reel",t:"reel",q:1,h:4}],horas:4,dias:1,equipos:true,asis:false,voz:false,vozH:1,mov:false,movT:"carro",ubic:"pucallpa",pers:1,pasaje:400,diasCiudad:1,noches:1,nochesManual:false,hosp:120,viat:40,tlocal:60,margenV:0,desc:0,igv:false};
 const TN={reel:"Reel corto","1min":"1 min","2min":"2 min+"};
 let C=Object.assign({},DC,JSON.parse(localStorage.kodaCfg||"{}"));
-let Q=Object.assign(JSON.parse(JSON.stringify(DQ)),JSON.parse(localStorage.kodaQuote||"{}"));
+const savedQ=JSON.parse(localStorage.kodaQuote||"{}");
+let Q=Object.assign(JSON.parse(JSON.stringify(DQ)),savedQ);
+if(savedQ.diasCiudad==null)Q.diasCiudad=Math.max(1,+Q.dias||1);
+if(!(+Q.diasCiudad>=1))Q.diasCiudad=1;
+if(savedQ.nochesManual==null)Q.nochesManual=savedQ.noches!=null&&+savedQ.noches!==Math.max(1,+Q.diasCiudad-1);
 let muted=localStorage.kodaMute==="1";
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const S=n=>"S/ "+Math.round(n).toLocaleString("en-US");
 function stepper(el,get,set,step,min){el.innerHTML='<button aria-label="Menos">−</button><input type="number" inputmode="decimal"><button aria-label="Más">＋</button>';const[a,i,b]=el.children;const sh=()=>i.value=get();
 a.onclick=()=>{set(Math.max(min,+(get()-step).toFixed(2)));sh()};b.onclick=()=>{set(+(get()+step).toFixed(2));sh()};i.onchange=()=>{set(Math.max(min,+i.value||0));sh()};el.sync=sh;sh()}
-$$(".st[data-k]").forEach(el=>{const k=el.dataset.k;stepper(el,()=>Q[k],v=>{Q[k]=v;render()},+el.dataset.s,k=="dias"||k=="pers"?1:0)});
+$$(".st[data-k]").forEach(el=>{const k=el.dataset.k,min=(k=="dias"||k=="pers"||k=="diasCiudad")?1:0;stepper(el,()=>Q[k],v=>{Q[k]=v;if(k=="noches")Q.nochesManual=true;if(k=="diasCiudad"&&!Q.nochesManual)Q.noches=Math.max(1,v-1);render()},+el.dataset.s,min)});
 $$("input[data-k]:not(.n)").forEach(e=>e.onchange=()=>{Q[e.dataset.k]=e.checked;render()});
 $$("input.n[data-k]").forEach(e=>e.oninput=()=>{Q[e.dataset.k]=+e.value||0;render(1)});
-$$(".seg[data-k]").forEach(s=>s.onclick=e=>{const v=e.target.dataset.v;if(!v)return;const k=s.dataset.k;if(k=="ubic"&&v!=Q.ubic){const l=v=="lima";Q.pasaje=l?C.pasLima:C.pasOtra;Q.hosp=l?C.hospLima:C.hospOtra;Q.viat=C.viat;Q.tlocal=l?C.tLima:C.tOtra;Q.margenV=C.margenV;Q.noches=Math.max(1,Q.dias)}Q[k]=v;render()});
+$$(".seg[data-k]").forEach(s=>s.onclick=e=>{const v=e.target.dataset.v;if(!v)return;const k=s.dataset.k;if(k=="ubic"&&v!=Q.ubic){const l=v=="lima";Q.pasaje=l?C.pasLima:C.pasOtra;Q.hosp=l?C.hospLima:C.hospOtra;Q.viat=C.viat;Q.tlocal=l?C.tLima:C.tOtra;Q.margenV=C.margenV;if(v!="pucallpa"){Q.diasCiudad=Math.max(1,+Q.dias||1);Q.nochesManual=false;Q.noches=Math.max(1,Q.diasCiudad-1)}}Q[k]=v;render()});
 function calc(){const L=[];let inv=0;const H=Q.horas*Q.dias;
 L.push(["Rodaje",H+" h",H*C.pRod]);inv+=H*C.cRod;
 Q.vids.forEach(v=>{const p=Math.max(C.pEdMin,v.h*C.pEd)*v.q;L.push(["Edición · "+v.n+" ("+TN[v.t]+")",v.q+" × "+v.h+" h",p]);inv+=v.h*v.q*C.cEd});
@@ -116,8 +121,8 @@ if(Q.equipos){const p=H*C.pEq;L.push(["Alquiler de equipos",H+" h",p]);inv+=p*C.
 if(Q.asis){L.push(["Asistente",H+" h",H*C.pAs]);inv+=H*C.cAs}
 if(Q.voz){L.push(["Voz en off (Natán)",Q.vozH+" h",Q.vozH*C.pVoz]);inv+=Q.vozH*C.cVoz}
 if(Q.mov){const c=Q.movT=="carro";L.push(["Movilidad ("+(c?"carro":"moto")+")",Q.dias+" día(s)",Q.dias*(c?C.pCarro:C.pMoto)]);inv+=Q.dias*(c?C.cCarro:C.cMoto)}
-if(Q.ubic!="pucallpa"){const m=1+Q.margenV/100,P=Q.pers,D=Q.dias;
-[["Pasajes i/v",P+" × "+S(Q.pasaje),P*Q.pasaje],["Hospedaje",P+"p × "+Q.noches+" n",P*Q.noches*Q.hosp],["Viáticos",P+"p × "+D+" d",P*D*Q.viat],["Transporte local",D+" d",D*Q.tlocal]].forEach(r=>{inv+=r[2];L.push([r[0],r[1],r[2]*m])})}
+if(Q.ubic!="pucallpa"){const m=1+Q.margenV/100,P=Q.pers,D=Math.max(1,+Q.diasCiudad||1);
+[["Pasajes i/v",P+" pers × "+S(Q.pasaje),P*Q.pasaje],["Hospedaje",P+" pers × "+Q.noches+" noches × "+S(Q.hosp),P*Q.noches*Q.hosp],["Viáticos",P+" pers × "+D+" días × "+S(Q.viat),P*D*Q.viat],["Transporte local",D+" días × "+S(Q.tlocal),D*Q.tlocal]].forEach(r=>{inv+=r[2];L.push([r[0],r[1],r[2]*m])})}
 const sub=L.reduce((a,r)=>a+r[2],0),d=sub*Q.desc/100,base=sub-d,igv=Q.igv?base*.18:0,tot=base+igv,g=base-inv;
 return{L,sub,d,igv,tot,inv,g,mg:base?g/base*100:0}}
 function render(skipInputs){const r=calc();localStorage.kodaQuote=JSON.stringify(Q);localStorage.kodaCfg=JSON.stringify(C);
@@ -141,8 +146,8 @@ function openSh(id){$("#ov").classList.add("on");$("#"+id).classList.add("on")}f
 let AC;function ding(){if(muted)return;try{AC=AC||new(window.AudioContext||webkitAudioContext)();[880,1318.5].forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+i*.11;o.frequency.value=f;o.type="sine";g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.15,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.35);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+.4)})}catch(e){}}
 function done(t){$("#okT").textContent=t;const o=$("#ok");o.classList.remove("on");void o.offsetWidth;o.classList.add("on");ding();setTimeout(()=>o.classList.remove("on"),1300)}
 const mb=$("#mute");mb.textContent=muted?"🔇":"🔊";mb.onclick=()=>{muted=!muted;localStorage.kodaMute=muted?"1":"0";mb.textContent=muted?"🔇":"🔊"};
-function texto(){const r=calc(),u={pucallpa:"Pucallpa",lima:"Lima",otra:"Otra ciudad"}[Q.ubic];
-return `🎬 *Presupuesto – Koda Studio*\n📍 ${u} · 🎥 ${Q.dias} día(s), ${Q.horas} h de rodaje/día\n\n`+(Q.vids.length?"🎞️ *Videos:*\n"+Q.vids.map(v=>`• ${v.q}× ${v.n} (${TN[v.t]})`).join("\n")+"\n\n":"")+
+function texto(){const r=calc(),u={pucallpa:"Pucallpa",lima:"Lima",otra:"Otra ciudad"}[Q.ubic],dc=Q.ubic!="pucallpa"?" · "+Math.max(1,+Q.diasCiudad||1)+" día(s) en la ciudad":"";
+return `🎬 *Presupuesto – Koda Studio*\n📍 ${u}${dc} · 🎥 ${Q.dias} día(s), ${Q.horas} h de rodaje/día\n\n`+(Q.vids.length?"🎞️ *Videos:*\n"+Q.vids.map(v=>`• ${v.q}× ${v.n} (${TN[v.t]})`).join("\n")+"\n\n":"")+
 "🧾 *Detalle:*\n"+r.L.map(l=>`• ${l[0]} (${l[1]}): ${S(l[2])}`).join("\n")+(r.d?`\n• Descuento ${Q.desc}%: −${S(r.d)}`:"")+(Q.igv?`\n• IGV 18%: ${S(r.igv)}`:"")+`\n\n💰 *Total: ${S(r.tot)}*${Q.igv?"":" (no incluye IGV)"}\n\n¡Gracias por confiar en Koda Studio! 🙌`}
 $("#copy").onclick=async()=>{const t=texto();try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}done("¡Copiado!")};
 render();
