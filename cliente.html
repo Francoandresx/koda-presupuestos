@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KODA · Tu inversión y tu presencia</title>
+<meta name="description" content="Arma con KODA Studio el mes de contenido: inversión y presencia en redes. Videos, piezas gráficas y planes.">
+<meta name="theme-color" content="#1D1D1F">
+<meta name="apple-mobile-web-app-title" content="KODA">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F7F7;--ink:#1D1D1F;--gold:#C79C5A;--card:#fff;--muted:#5E5A55;
+  --line:rgba(199,156,90,.4);--soft:rgba(29,29,31,.06);--sand:#FBF7F0;
+  --page:720px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink)}
+body{font-family:"Plus Jakarta Sans",system-ui,sans-serif;line-height:1.45;font-size:16px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;touch-action:manipulation}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+::selection{background:var(--gold);color:var(--ink)}
+.goldbar{height:4px;background:var(--gold)}
+.header{background:#1D1D1F;color:#F7F7F7}
+.header-in{width:min(var(--page),100%);margin:0 auto;padding:12px 16px 14px;display:flex;gap:12px;align-items:center}
+.header img{height:48px;width:auto;flex:none}
+.logo-ink{display:none}
+.brand-kicker{margin:0 0 2px;color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.14em}
+.header h1{margin:0;font-size:20px;line-height:1.15;letter-spacing:-.03em;font-weight:800}
+.layout{width:min(var(--page),100%);margin:0 auto;padding:12px 16px calc(118px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px}
+.lede{margin:0;color:var(--muted);font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:14px;box-shadow:0 12px 32px rgba(29,29,31,.05)}
+h2{margin:0 0 2px;font-size:20px;letter-spacing:-.03em;line-height:1.2}
+.kicker{margin:0 0 8px;color:var(--gold);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.sub{margin:0;color:var(--muted);font-size:14px}
+.lbl{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.field{width:100%;border:none;background:var(--bg);border-radius:14px;padding:12px 14px;font-size:16px;outline:none}
+.field:focus{box-shadow:0 0 0 2px var(--gold)}
+.mix-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.mix-copy{flex:1 1 auto;min-width:0}
+.mix-row label{display:block;font-weight:800;font-size:16px}
+.mix-row small{display:block;color:var(--muted);font-size:13px;font-weight:500;margin-top:2px}
+.st{display:flex;align-items:center;background:var(--bg);border-radius:16px;flex:none;border:1px solid var(--soft);margin-left:auto}
+.st button{width:48px;height:48px;border:none;background:transparent;font-size:26px;line-height:1;border-radius:16px;color:var(--ink)}
+.st button:disabled{opacity:.28;cursor:default}
+.st input{width:40px;border:none;background:transparent;text-align:center;font-weight:800;font-size:20px;padding:0}
+.switch{width:100%;margin-top:2px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:1px solid var(--line);background:#fff;border-radius:18px;padding:10px 12px 10px 14px;min-height:64px}
+.switch.on{background:var(--sand);border-color:var(--gold)}
+.switch:disabled{opacity:.7;cursor:default}
+.switch-title{display:block;font-weight:800}
+.switch-help{display:block;color:var(--muted);font-size:13px;font-weight:500;margin-top:2px}
+.switch-ui{width:52px;height:32px;border-radius:999px;background:#E4E1DC;position:relative;flex:none}
+.switch.on .switch-ui{background:var(--gold)}
+.switch-ui span{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .2s ease}
+.switch.on .switch-ui span{transform:translateX(20px)}
+.presence-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-end}
+.score{text-align:right;flex:none}
+.score strong{display:block;font-size:36px;letter-spacing:-.05em;line-height:.9}
+.score span{font-weight:800;color:#8A6230;font-size:14px}
+.meter{position:relative;margin-top:12px;height:18px}
+.meter-track{position:relative;height:18px;border-radius:999px;background:#E4DDD2;overflow:hidden}
+.meter-fill{height:100%;width:0;border-radius:inherit;background:var(--gold);transition:width .5s cubic-bezier(.22,.8,.28,1)}
+.meter-mark{position:absolute;top:-3px;width:2px;height:22px;background:rgba(29,29,31,.45);transform:translateX(-1px);pointer-events:none}
+.meter-mark.end{left:100%;transform:translateX(-2px);background:rgba(29,29,31,.28)}
+.meter-legend{position:relative;height:16px;margin-top:8px;font-size:11px;font-weight:700;color:var(--muted)}
+.meter-legend span{position:absolute;top:0;white-space:nowrap}
+.meter-legend .mid{left:60%;transform:translateX(-50%)}
+.meter-legend .end{right:0}
+.scale-note{margin:8px 0 0;color:var(--muted);font-size:13px}
+.benefits{border-left:3px solid var(--gold)}
+.benefits h2{margin-top:2px}
+.benefits p{margin:8px 0 0;font-size:15.5px}
+.quote{border-top:3px solid var(--gold)}
+.for{margin:0 0 8px;font-weight:700}
+.grouplab{margin:14px 0 0;color:var(--gold);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.grouplab:first-child{margin-top:0}
+.line{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--soft)}
+.line b{font-weight:700}
+.line small{display:block;color:var(--muted);font-weight:500;font-size:13px}
+.amt{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{position:relative;padding:7px 0 7px 16px;border-bottom:1px solid var(--soft)}
+.checks li::before{content:"";position:absolute;left:0;top:14px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.tot{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:2px 0 4px;padding:0 0 10px;border-bottom:1px solid var(--gold)}
+.tot span{font-weight:800}
+.tot strong{font-size:34px;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.quote-lead{margin:0 0 10px;font-size:18px;font-weight:800;letter-spacing:-.03em;line-height:1.25}
+.quote-note{margin:10px 0 0;color:var(--muted);font-size:14px}
+.textbtn{margin-top:8px;border:none;background:none;padding:10px 0;min-height:44px;font-weight:800;color:#8A6230;text-decoration:underline;text-underline-offset:3px}
+.empty{margin:0;color:var(--muted)}
+.nudge,.recommend{display:flex;flex-direction:column;gap:8px}
+.recommend{background:var(--sand);border-color:var(--gold)}
+.recommend h3,.nudge h3{margin:0;font-size:18px;letter-spacing:-.03em}
+.recommend p,.nudge p{margin:0}
+.save{font-weight:800}
+.plans-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+.plans{display:flex;flex-direction:column;gap:10px}
+.plan{position:relative;background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:4px;text-align:left}
+.plan.is-rec{box-shadow:0 0 0 1px var(--gold)}
+.plan.is-on{background:var(--sand);border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}
+.plan h3{margin:0;font-size:18px;letter-spacing:-.03em;padding-right:96px}
+.plan .price{font-size:28px;font-weight:800;letter-spacing:-.04em;margin:4px 0}
+.plan .price small{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:0}
+.plan ul{list-style:none;margin:4px 0 12px;padding:0}
+.plan li{position:relative;padding-left:14px;margin:4px 0;font-size:14px;color:#3a3835}
+.plan li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.badge{position:absolute;top:14px;right:14px;background:var(--gold);color:var(--ink);font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:4px 8px}
+.tag{display:inline-block;margin-top:2px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8A6230}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;border:none;border-radius:16px;min-height:52px;padding:0 16px;background:var(--gold);color:var(--ink);font-weight:800;font-size:16px;text-decoration:none}
+.btn.ghost{background:#fff;border:1px solid var(--gold);margin-top:auto}
+.btn[aria-pressed="true"]{background:#1D1D1F;color:#F7F7F7;border-color:#1D1D1F}
+.over{margin:0;color:var(--muted);font-size:14px}
+.foot{margin:0;color:var(--muted);font-size:13px;text-align:center}
+.foot a{color:var(--ink);font-weight:700}
+.dock-wrap{position:fixed;z-index:20;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:0 12px calc(10px + env(safe-area-inset-bottom));pointer-events:none}
+.dock{pointer-events:auto;width:min(var(--page),100%);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 10px 10px 16px;border-radius:22px;background:rgba(255,255,255,.94);border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 12px 40px rgba(29,29,31,.12)}
+.dock small{color:var(--muted);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+.dock strong{display:block;font-size:clamp(22px,7vw,28px);letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.dock .sub{font-size:12px;color:var(--muted);font-weight:600}
+.dock .go{flex:none;border:none;background:var(--gold);color:var(--ink);font-weight:800;border-radius:14px;min-height:48px;padding:0 14px;text-decoration:none;display:flex;align-items:center}
+@media(min-width:860px){
+  :root{--page:980px}
+  .header-in{padding:16px 16px 18px}
+  .header img{height:54px}
+  .header h1{font-size:26px}
+  .card{padding:16px}
+  .st button{width:52px;height:52px}
+  .hero{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+  .plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
+  .plan .btn{margin-top:auto}
+  .dock-wrap{display:none}
+  .layout{padding-bottom:32px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+@media print{
+  .dock-wrap,.wa-block,.textbtn{display:none!important}
+  body{background:#fff}
+  .header{background:#fff;color:var(--ink)}
+  .logo-light{display:none}
+  .logo-ink{display:block}
+  .brand-kicker,.header h1{color:var(--ink)}
+  .card{box-shadow:none}
+}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="goldbar"></div>
+  <div class="header-in">
+    <img class="logo-light" src="logo.png" alt="KODA">
+    <img class="logo-ink" src="logo-ink.png" alt="">
+    <div>
+      <p class="brand-kicker">KODA STUDIO</p>
+      <h1>Qué inviertes este mes</h1>
+    </div>
+  </div>
+</header>
+
+<main class="layout" id="app" data-mode="suelto">
+  <p class="lede">Cuánto inviertes y qué presencia te deja en redes.</p>
+
+  <section class="card" aria-labelledby="mesTitle">
+    <h2 id="mesTitle">Este mes</h2>
+    <label class="lbl" for="client" style="margin-top:8px">Cliente <span style="font-weight:500;color:#5E5A55">(opcional)</span></label>
+    <input class="field" id="client" placeholder="Nombre del cliente, si quieres" autocomplete="name" maxlength="80">
+
+    <div class="mix-row">
+      <div class="mix-copy">
+        <label id="lbl-reels" for="reels">Videos / reels</label>
+        <small id="reelsHelp">Un video suelto, con la sesión incluida.</small>
+      </div>
+      <div class="st">
+        <button type="button" id="reelsDec" aria-label="Menos videos">−</button>
+        <input id="reels" type="number" inputmode="numeric" min="0" max="12" value="1" aria-describedby="reelsHelp">
+        <button type="button" id="reelsInc" aria-label="Más videos">＋</button>
+      </div>
+    </div>
+
+    <div class="mix-row">
+      <div class="mix-copy">
+        <label id="lbl-graphics" for="graphics">Piezas gráficas</label>
+        <small id="graphicsHelp">Publicaciones y diseños: ofertas, recordatorios e información. Hasta 16.</small>
+      </div>
+      <div class="st">
+        <button type="button" id="graphicsDec" aria-label="Menos piezas gráficas">−</button>
+        <input id="graphics" type="number" inputmode="numeric" min="0" max="16" value="0" aria-describedby="graphicsHelp">
+        <button type="button" id="graphicsInc" aria-label="Más piezas gráficas">＋</button>
+      </div>
+    </div>
+
+    <button type="button" class="switch on" id="estrategia" aria-pressed="true">
+      <span>
+        <span class="switch-title">Estrategia + guiones</span>
+        <span class="switch-help" id="estrategiaHelp">Base del proyecto + un monto por video. No se cobra en las gráficas.</span>
+      </span>
+      <span class="switch-ui" aria-hidden="true"><span></span></span>
+    </button>
+  </section>
+
+  <div class="hero">
+    <section class="card" aria-labelledby="presTitle">
+      <div class="presence-top">
+        <div>
+          <h2 id="presTitle">Presencia digital en redes</h2>
+          <p class="sub">Qué tan activo se ve tu contenido</p>
+        </div>
+        <div class="score">
+          <strong id="presencePct">15%</strong>
+          <span id="presenceLabel">Puntual</span>
+        </div>
+      </div>
+      <div class="meter">
+        <div class="meter-track" id="presenceBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="15" aria-valuetext="15% · Puntual" aria-labelledby="presTitle">
+          <div class="meter-fill" id="presenceFill" style="width:15%"></div>
+        </div>
+        <span class="meter-mark" style="left:60%"></span>
+        <span class="meter-mark end"></span>
+      </div>
+      <div class="meter-legend" aria-hidden="true">
+        <span class="mid">4 videos</span>
+        <span class="end">4 + 8</span>
+      </div>
+      <p class="scale-note">4 videos y 8 diseños al mes es la referencia de contenido activo (el 100%): cerca de 3 publicaciones por semana, un reel y dos diseños.</p>
+    </section>
+
+    <section class="card quote" id="quote" aria-live="polite">
+      <p class="kicker" id="quoteKicker">Inversión</p>
+      <p class="quote-lead" id="quoteLead" hidden></p>
+      <p class="for" id="quoteFor" hidden></p>
+      <div class="tot">
+        <span id="quoteTotLabel">Total</span>
+        <strong id="quoteTotal">S/ 0</strong>
+      </div>
+      <div id="quoteBody"></div>
+      <p class="quote-note" id="quoteNote"></p>
+      <button type="button" class="textbtn" id="backBtn" data-act="back" hidden>Volver a precio suelto</button>
+    </section>
+  </div>
+
+  <section class="card benefits" aria-live="polite">
+    <p class="kicker">Qué ganas</p>
+    <h2 id="benefitLead">Una pieza fuerte</h2>
+    <p id="benefitsBody"></p>
+  </section>
+
+  <section class="card nudge" id="nudge" hidden></section>
+  <section class="card recommend" id="recommend" hidden></section>
+
+  <section aria-labelledby="plansTitle">
+    <div class="plans-head">
+      <h2 id="plansTitle">Planes mensuales</h2>
+      <p id="plansIntro">Contrato de 3 meses. El precio es por mes.</p>
+      <p class="over" id="overcap" hidden></p>
+    </div>
+    <div class="plans" id="plans" style="margin-top:10px"></div>
+  </section>
+
+  <div class="wa-block">
+    <a class="btn" id="wa" href="https://wa.me/51934790362" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
+  </div>
+  <p class="foot">Validez 15 días · Publicidad en Meta/TikTok Ads aparte · KODA Studio · Franco Andrés · <a href="tel:+51934790362">+51 934 790 362</a></p>
+</main>
+
+<div class="dock-wrap">
+  <div class="dock">
+    <div>
+      <small id="dockKicker">Inversión de este mes</small>
+      <strong id="dockTotal">S/ 0</strong>
+      <div class="sub" id="dockSub">Presencia puntual · 15%</div>
+    </div>
+    <a class="go" id="dockWa" href="https://wa.me/51934790362" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+  </div>
+</div>
+
+<noscript><p style="padding:16px">Activa JavaScript para ver la inversión y la presencia.</p></noscript>
+
+<script>
+const DC={
+  sesion:{min:80,rec:100,prem:150},
+  reelSuelto:{min:180,rec:200,prem:250},
+  reel14:{min:150,rec:150,prem:175},
+  reel5:{min:100,rec:110,prem:150},
+  estBase:{min:60,rec:100,prem:150},
+  estVid:{min:20,rec:30,prem:45},
+  grafica:{min:40,rec:50,prem:70},
+  plan:{start:850,grow:1350,full:1790},
+  planMonths:3,
+  _rev:2
+};
+const PLANS=[
+  {id:"start",name:"Plan Start",reels:4,graphics:2,stories:0,sessions:1,photo:false,badge:"",points:[
+    "4 reels profesionales","2 piezas gráficas","Investigación de tendencias y propuesta de ideas","Planificación mensual y plataforma de revisión","1 sesión de rodaje"
+  ]},
+  {id:"grow",name:"Plan Grow",reels:6,graphics:4,stories:6,sessions:2,photo:false,badge:"Más elegido",points:[
+    "6 reels","4 piezas gráficas","6 historias","Investigación, ideas y planificación","Plataforma de revisión","Hasta 2 sesiones de rodaje"
+  ]},
+  {id:"full",name:"Plan Full",reels:8,graphics:6,stories:8,sessions:3,photo:true,badge:"",points:[
+    "8 reels","6 piezas gráficas","8 historias","Sesión de fotos","Investigación y desarrollo estratégico","Plataforma de revisión","Hasta 3 sesiones de rodaje"
+  ]}
+];
+const LIMITS={reels:12,graphics:16};
+const state={reels:1,graphics:0,estrategia:true,client:"",mode:"suelto",planId:null,saved:null};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function money(n){const v=Math.round(+n||0);return (v<0?"−":"")+"S/ "+Math.abs(v).toLocaleString("en-US")}
+function clamp(n,min,max){n=Math.round(+n);if(!Number.isFinite(n))n=min;return Math.min(max,Math.max(min,n))}
+function num(n,fallback){n=+n;return Number.isFinite(n)?n:fallback}
+function loadRates(){
+  let s=null;
+  try{s=JSON.parse(localStorage.kodaTarifas||"null")}catch(e){}
+  const c=JSON.parse(JSON.stringify(DC));
+  if(!s||typeof s!=="object")return c;
+  try{
+    for(const k of Object.keys(c)){
+      if(k==="_rev"||s[k]==null)continue;
+      if(c[k]&&typeof c[k]==="object"){
+        if(!s[k]||typeof s[k]!=="object")continue;
+        for(const sk of Object.keys(c[k]))if(s[k][sk]!=null)c[k][sk]=+s[k][sk];
+      }else c[k]=+s[k];
+    }
+    if(s._rev!==2){
+      c.reel14=JSON.parse(JSON.stringify(DC.reel14));
+      c.reelSuelto=JSON.parse(JSON.stringify(DC.reelSuelto));
+    }
+  }catch(e){return JSON.parse(JSON.stringify(DC))}
+  return c;
+}
+let C=loadRates();
+function rec(key){const v=C[key];if(v&&typeof v==="object")return num(v.rec,DC[key].rec);return num(v,typeof DC[key]==="number"?DC[key]:0)}
+function planPrice(id){return num(C.plan&&C.plan[id],DC.plan[id])}
+function planMonths(){return Math.max(1,Math.round(num(C.planMonths,3)))}
+function monthsLabel(){const m=planMonths();return m+(m===1?" mes":" meses")}
+
+function reelLines(cant){
+  const lines=[];
+  if(cant<=0)return lines;
+  const sessions=Math.max(1,Math.ceil(cant/8));
+  const base=Math.floor(cant/sessions), extra=cant%sessions;
+  let hi=0,lo=0,sueltos=0,packageSessions=0,reelAmt=0;
+  const sesion=rec("sesion"), suelto=rec("reelSuelto"), r14=rec("reel14"), r5=rec("reel5");
+  for(let i=0;i<sessions;i++){
+    const count=base+(i<extra?1:0);
+    if(count<=1){if(count===1)sueltos++;else packageSessions++}
+    else if(count>0){
+      packageSessions++;
+      const a=Math.min(4,count), b=Math.max(0,count-4);
+      hi+=a;lo+=b;reelAmt+=a*r14+b*r5;
+    }
+  }
+  if(packageSessions)lines.push({group:"Videos",name:"Cargo por sesión",qty:packageSessions+" × "+money(sesion)+" · armado, traslado y auto",amount:packageSessions*sesion});
+  if(sueltos)lines.push({group:"Videos",name:"Reel suelto",qty:sueltos+" × "+money(suelto)+" · sesión incluida",amount:sueltos*suelto});
+  if(hi||lo){
+    const qty=hi&&lo?hi+" × "+money(r14)+" + "+lo+" × "+money(r5):(lo?lo+" × "+money(r5):hi+" × "+money(r14));
+    lines.push({group:"Videos",name:(hi+lo)===1?"Reel":"Reels",qty,amount:reelAmt});
+  }
+  return lines;
+}
+function priceAla(reels,graphics,estrategia){
+  const lines=reelLines(reels);
+  if(graphics>0){
+    const g=rec("grafica");
+    lines.push({group:"Piezas gráficas",name:graphics===1?"Pieza gráfica":"Piezas gráficas",qty:graphics+" × "+money(g),amount:graphics*g});
+  }
+  if(estrategia&&reels>0){
+    const base=rec("estBase"), each=rec("estVid");
+    lines.push({group:"Estrategia",name:"Estrategia + guiones",qty:"Base + "+reels+" video"+(reels===1?"":"s")+" × "+money(each),amount:base+each*reels});
+  }
+  const total=lines.reduce((s,l)=>s+l.amount,0);
+  return{lines,total};
+}
+function presencePercent(reels,graphics){
+  return Math.min(100,Math.round((reels/4)*60+(graphics/8)*40));
+}
+function presenceLabel(p){
+  if(p>=90)return "Recomendada";
+  if(p>=70)return "Activa";
+  if(p>=50)return "En camino";
+  if(p>=25)return "Baja";
+  return "Puntual";
+}
+function fitPlan(reels,graphics){
+  return PLANS.find(p=>reels<=p.reels&&graphics<=p.graphics)||PLANS[2];
+}
+function conviene(ala,price){
+  ala=Math.round(ala);price=Math.round(price);
+  if(!(price>0))return false;
+  return ala*10>=price*8||ala>price;
+}
+function joinEs(items){
+  const list=[];
+  items.forEach(x=>{if(x&&!list.includes(x))list.push(x)});
+  if(list.length<=1)return list[0]||"";
+  return list.slice(0,-1).join(", ")+" y "+list[list.length-1];
+}
+function extrasList(plan,reels,graphics,estrategia){
+  const covers=reels<=plan.reels&&graphics<=plan.graphics;
+  const head=[];
+  const moreR=plan.reels-reels, moreG=plan.graphics-graphics;
+  if(covers&&moreR>0)head.push(moreR===1?"1 reel más":moreR+" reels más");
+  if(covers&&moreG>0)head.push(moreG===1?"1 pieza gráfica más":moreG+" piezas gráficas más");
+  if(covers&&!estrategia&&reels>0)head.push("estrategia y guiones");
+  if(plan.stories)head.push(plan.stories+" historias");
+  if(plan.photo)head.push("sesión de fotos");
+  if(!head.length){
+    if(plan.id==="start")head.push("investigación de tendencias","propuesta de ideas");
+    else if(plan.id==="grow")head.push("investigación y propuesta de ideas");
+    else head.push("desarrollo estratégico");
+  }else if(plan.id==="full")head.push("desarrollo estratégico");
+  const sessions=plan.sessions===1?"1 sesión de rodaje":"hasta "+plan.sessions+" sesiones de rodaje";
+  return head.concat(["planificación",sessions]);
+}
+function benefits(reels,graphics){
+  if(reels<=0&&graphics<=0)return{title:"El perfil quieto",body:"Sin piezas este mes la marca no aparece. Un video suelto alcanza para un lanzamiento o un producto. Cuatro videos al mes ya dejan un reel cerca de cada semana."};
+  if(reels===1&&graphics<=0)return{title:"Una pieza fuerte",body:"Un video suelto se luce unos días: va muy bien para un lanzamiento o para un solo producto. Después el perfil vuelve a quedar en silencio hasta el próximo aviso."};
+  if(reels<=0&&graphics>0)return{title:"Perfil cuidado, poco video",body:"Las piezas gráficas llenan el perfil con ofertas, recordatorios e información, y lo mantienen vivo todo el mes. Sin video la presencia se ve, pero empuja menos."};
+  if(reels>=4&&graphics>0){
+    const ritmo=reels>=8?"El video sale seguido, cerca de dos veces por semana.":reels>4?"Hay más de un video por semana.":"Toca cerca de un video por semana.";
+    return{title:"Alcance y constancia",body:ritmo+" Los videos abren el alcance y las piezas gráficas sostienen el perfil entre un reel y otro. La marca se ve activa el mes entero, no solo el día de la publicación."};
+  }
+  if(reels>=4){
+    const ritmo=reels>=8?"cerca de dos reels por semana":reels>4?"más de un reel por semana":"cerca de un reel por semana";
+    return{title:"La marca sigue en circulación",body:"Con "+reels+" videos al mes publicas "+ritmo+". El algoritmo sigue mostrando la marca y dejas de desaparecer entre un post y el siguiente. Unas piezas gráficas llenarían los días sin video con ofertas o avisos."};
+  }
+  if(reels===1)return{title:"Un golpe y el resto del mes",body:"El video hace el aviso fuerte, ideal para un lanzamiento o un producto. Las piezas gráficas evitan que el perfil se apague los demás días: ofertas, recordatorios e información hasta el próximo reel."};
+  if(graphics<=0)return{title:"Más de un aviso, todavía con huecos",body:"Varios videos dan más de un momento de visibilidad en el mes. Entre uno y otro todavía hay silencios. Con 4 videos el ritmo queda cerca de un reel por semana y la marca se mantiene a la vista."};
+  return{title:"Video para llegar, diseño para quedarte",body:"Los reels empujan el alcance y las piezas gráficas mantienen ofertas y avisos en el perfil. Si llegas a 4 videos al mes, la presencia deja de ser intermitente: cerca de un reel cada semana, con el perfil vivo entre medias."};
+}
+function videoHelp(reels){
+  if(reels<=1)return "Un video suelto, con la sesión incluida. Hasta 12.";
+  const sessions=Math.max(1,Math.ceil(reels/8));
+  if(sessions>1)return sessions+" sesiones de rodaje. Cada una cubre hasta 8 reels.";
+  return "Una sesión de rodaje para estos reels. Hasta 12.";
+}
+function waText(){
+  const lines=["Hola Franco, revisamos esta propuesta de KODA Studio:",""];
+  const name=state.client.trim();
+  if(name)lines.push("Cliente: "+name);
+  if(state.mode==="plan"){
+    const plan=PLANS.find(p=>p.id===state.planId)||PLANS[0];
+    lines.push("Con el "+plan.name+" inviertes "+money(planPrice(plan.id))+" al mes.");
+    lines.push("Incluye "+plan.reels+" reels y "+plan.graphics+" piezas gráficas.");
+    lines.push("Contrato de "+monthsLabel()+".");
+  }else{
+    lines.push(state.reels+" "+(state.reels===1?"video / reel":"videos / reels"));
+    lines.push(state.graphics+" "+(state.graphics===1?"pieza gráfica":"piezas gráficas"));
+    lines.push("Estrategia + guiones: "+(state.estrategia?"sí":"no"));
+    const pack=priceAla(state.reels,state.graphics,state.estrategia);
+    lines.push("","Inversión: "+money(pack.total));
+    const plan=fitPlan(state.reels,state.graphics);
+    if(conviene(pack.total,planPrice(plan.id)))lines.push("Plan recomendado: "+plan.name+" · "+money(planPrice(plan.id))+" al mes");
+  }
+  lines.push("","Validez 15 días. Publicidad en Meta/TikTok Ads aparte.");
+  return lines.join("\n");
+}
+function waHref(){return "https://wa.me/51934790362?text="+encodeURIComponent(waText())}
+
+function leavePlanKeepQty(){state.mode="suelto";state.planId=null;state.saved=null}
+function setQty(key,value){
+  const v=clamp(value,0,LIMITS[key]);
+  if(v===state[key])return false;
+  state[key]=v;
+  if(state.mode==="plan")leavePlanKeepQty();
+  return true;
+}
+function choosePlan(id){
+  const plan=PLANS.find(p=>p.id===id);
+  if(!plan)return;
+  if(state.mode==="plan"&&state.planId===id)return;
+  if(state.mode!=="plan")state.saved={reels:state.reels,graphics:state.graphics,estrategia:state.estrategia};
+  state.mode="plan";
+  state.planId=id;
+  state.reels=plan.reels;
+  state.graphics=plan.graphics;
+  render();
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.getElementById("quote").scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});
+}
+function backToSuelto(){
+  if(state.saved){state.reels=state.saved.reels;state.graphics=state.saved.graphics;state.estrategia=state.saved.estrategia}
+  state.mode="suelto";state.planId=null;state.saved=null;
+  render();
+}
+
+function renderMix(){
+  const reels=document.getElementById("reels"), graphics=document.getElementById("graphics"), client=document.getElementById("client");
+  if(document.activeElement!==reels)reels.value=state.reels;
+  if(document.activeElement!==graphics)graphics.value=state.graphics;
+  if(document.activeElement!==client)client.value=state.client;
+  document.getElementById("reelsDec").disabled=state.reels<=0;
+  document.getElementById("reelsInc").disabled=state.reels>=LIMITS.reels;
+  document.getElementById("graphicsDec").disabled=state.graphics<=0;
+  document.getElementById("graphicsInc").disabled=state.graphics>=LIMITS.graphics;
+  document.getElementById("reelsHelp").textContent=videoHelp(state.reels);
+  const est=document.getElementById("estrategia");
+  const on=!!state.estrategia;
+  est.classList.toggle("on",on);
+  est.setAttribute("aria-pressed",on?"true":"false");
+  est.disabled=state.mode==="plan";
+  const help=document.getElementById("estrategiaHelp");
+  if(state.mode==="plan")help.textContent="En el plan la estrategia ya va incluida.";
+  else if(state.reels<=0)help.textContent="Queda activada y se cobra cuando hay al menos un video. No aplica a las piezas gráficas.";
+  else help.textContent="Base de "+money(rec("estBase"))+" + "+money(rec("estVid"))+" por video. No se cobra en las gráficas.";
+}
+function renderPresence(){
+  const pct=presencePercent(state.reels,state.graphics);
+  const label=presenceLabel(pct);
+  document.getElementById("presencePct").textContent=pct+"%";
+  document.getElementById("presenceLabel").textContent=label;
+  const bar=document.getElementById("presenceBar");
+  bar.setAttribute("aria-valuenow",String(pct));
+  bar.setAttribute("aria-valuetext",pct+"% · "+label);
+  bar.dataset.percent=String(pct);
+  document.getElementById("presenceFill").style.width=pct+"%";
+}
+function renderBenefits(){
+  const b=benefits(state.reels,state.graphics);
+  const lead=document.getElementById("benefitLead");
+  lead.textContent=b.title;
+  lead.dataset.tone=b.title;
+  document.getElementById("benefitsBody").textContent=b.body;
+}
+function linesHTML(lines){
+  if(!lines.length)return '<p class="empty">Todavía no hay piezas este mes. Suma un video o una gráfica para ver la inversión.</p>';
+  let last="",html="";
+  lines.forEach(l=>{
+    if(l.group!==last){html+=`<p class="grouplab">${esc(l.group)}</p>`;last=l.group}
+    html+=`<div class="line"><div><b>${esc(l.name)}</b><small>${esc(l.qty)}</small></div><span class="amt">${money(l.amount)}</span></div>`;
+  });
+  return html;
+}
+function renderQuote(){
+  const quote=document.getElementById("quote");
+  const lead=document.getElementById("quoteLead");
+  const note=document.getElementById("quoteNote");
+  const back=document.getElementById("backBtn");
+  const name=state.client.trim();
+  const forEl=document.getElementById("quoteFor");
+  forEl.hidden=!name;
+  forEl.textContent=name?("Para "+name):"";
+  const loose=priceAla(state.reels,state.graphics,state.estrategia);
+  let amount=Math.round(loose.total);
+  if(state.mode==="plan"){
+    const plan=PLANS.find(p=>p.id===state.planId)||PLANS[0];
+    amount=Math.round(planPrice(plan.id));
+    document.getElementById("quoteKicker").textContent=plan.name;
+    lead.hidden=false;
+    lead.textContent="Con el "+plan.name+" inviertes "+money(amount)+" al mes.";
+    document.getElementById("quoteBody").innerHTML='<ul class="checks">'+plan.points.map(p=>`<li>${esc(p)}</li>`).join("")+"</ul>";
+    document.getElementById("quoteTotLabel").textContent="Al mes";
+    const withStrategy=Math.round(priceAla(plan.reels,plan.graphics,true).total);
+    if(withStrategy>amount)note.textContent="Con estrategia y guiones, esta mezcla suelta sale "+money(withStrategy)+". Ahorras "+money(withStrategy-amount)+" al mes.";
+    else if(amount>withStrategy)note.textContent="Con estrategia y guiones, esta mezcla suelta sale "+money(withStrategy)+". El plan son "+money(amount-withStrategy)+" más al mes, con lo que el paquete suma.";
+    else note.textContent="Con estrategia y guiones, esta mezcla suelta sale igual que el plan.";
+    back.hidden=false;
+    quote.dataset.kind="plan";
+    quote.dataset.plan=plan.id;
+  }else{
+    document.getElementById("quoteKicker").textContent="Inversión";
+    lead.hidden=true;
+    lead.textContent="";
+    document.getElementById("quoteBody").innerHTML=linesHTML(loose.lines);
+    document.getElementById("quoteTotLabel").textContent="Total";
+    note.textContent="";
+    back.hidden=true;
+    quote.dataset.kind="suelto";
+    delete quote.dataset.plan;
+  }
+  document.getElementById("quoteTotal").textContent=money(amount);
+  quote.dataset.amount=String(amount);
+  quote.dataset.loose=String(Math.round(loose.total));
+}
+function renderNudge(){
+  const el=document.getElementById("nudge");
+  const loose=priceAla(state.reels,state.graphics,state.estrategia);
+  const fit=fitPlan(state.reels,state.graphics);
+  const show=state.mode==="suelto"&&state.reels<4&&!conviene(loose.total,planPrice(fit.id));
+  if(!show){el.hidden=true;el.innerHTML="";return}
+  const plan=fitPlan(4,state.graphics);
+  const ala4=Math.round(priceAla(4,state.graphics,state.estrategia).total);
+  const price=Math.round(planPrice(plan.id));
+  const now=state.reels===0?"sin videos":state.reels===1?"1 video":state.reels+" videos";
+  const heading=state.reels===0?"Un video ya mueve el mes":"De "+now+" a un ritmo semanal";
+  el.hidden=false;
+  el.innerHTML=`<h3>${esc(heading)}</h3><p>Si pasas a 4 videos al mes te acercas al ${esc(plan.name)}. Sueltos salen ${money(ala4)}; el plan son ${money(price)} al mes.</p><button type="button" class="btn ghost" data-act="try4">Ver 4 videos al mes</button>`;
+}
+function renderRecommend(){
+  const el=document.getElementById("recommend");
+  if(state.mode==="plan"){el.hidden=true;el.innerHTML="";return}
+  const loose=priceAla(state.reels,state.graphics,state.estrategia);
+  const plan=fitPlan(state.reels,state.graphics);
+  const ala=Math.round(loose.total), price=Math.round(planPrice(plan.id));
+  if(!conviene(ala,price)){el.hidden=true;el.innerHTML="";return}
+  const covers=state.reels<=plan.reels&&state.graphics<=plan.graphics;
+  let body=`Tu mezcla sale <b>${money(ala)}</b> suelto. El ${esc(plan.name)} son <b>${money(price)}</b> al mes.`;
+  if(!covers)body+=` Incluye hasta ${plan.reels} reels y ${plan.graphics} piezas gráficas; tu selección pasa ese volumen.`;
+  let save="";
+  if(covers&&price<ala)save=`<p class="save">Ahorras ${money(ala-price)} al mes.</p>`;
+  else if(covers&&price>ala)save=`<p>Son ${money(price-ala)} más al mes, y el plan suma lo que el suelto no trae.</p>`;
+  else if(covers)save=`<p>El mismo monto, con lo que el plan suma de más.</p>`;
+  const extras=joinEs(extrasList(plan,state.reels,state.graphics,state.estrategia&&state.reels>0));
+  el.hidden=false;
+  el.innerHTML=`<p class="kicker">Te conviene el plan</p><h3>${esc(plan.name)}</h3><p>${body}</p>${save}<p>El plan también incluye ${esc(extras)}.</p><button type="button" class="btn" data-act="choose" data-plan="${plan.id}">Armar el ${esc(plan.name)}</button>`;
+}
+function renderPlans(){
+  const loose=priceAla(state.reels,state.graphics,state.estrategia);
+  const fit=fitPlan(state.reels,state.graphics);
+  const showRec=state.mode==="suelto"&&conviene(loose.total,planPrice(fit.id));
+  document.getElementById("plansIntro").textContent="Contrato de "+monthsLabel()+". El precio es por mes.";
+  const over=document.getElementById("overcap");
+  const overFull=state.reels>8||state.graphics>6;
+  if(state.mode==="suelto"&&overFull&&!(showRec&&fit.id==="full")){
+    over.hidden=false;
+    over.textContent="Tu selección pasa lo que incluye el Plan Full: 8 reels y 6 piezas gráficas.";
+  }else over.hidden=true;
+  document.getElementById("plans").innerHTML=PLANS.map(plan=>{
+    const on=state.mode==="plan"&&state.planId===plan.id;
+    const rec=showRec&&fit.id===plan.id;
+    const cls=["plan",on?"is-on":"",rec?"is-rec":""].filter(Boolean).join(" ");
+    const badge=plan.badge?`<span class="badge">${esc(plan.badge)}</span>`:"";
+    const tag=on?'<span class="tag">Elegido</span>':rec?'<span class="tag">Te conviene</span>':"";
+    const pressed=on?"true":"false";
+    const label=on?"Elegido":"Elegir";
+    return `<article class="${cls}" data-plan="${plan.id}"><h3>${esc(plan.name)}</h3>${badge}${tag}<div class="price">${money(planPrice(plan.id))} <small>/ mes</small></div><ul>${plan.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul><button type="button" class="btn ghost" data-act="choose" data-plan="${plan.id}" aria-pressed="${pressed}">${label}</button></article>`;
+  }).join("");
+}
+function renderDock(){
+  const quote=document.getElementById("quote");
+  const amount=+quote.dataset.amount||0;
+  const pct=presencePercent(state.reels,state.graphics);
+  const label=presenceLabel(pct);
+  document.getElementById("dockTotal").textContent=money(amount);
+  document.getElementById("dockTotal").dataset.amount=String(amount);
+  if(state.mode==="plan"){
+    const plan=PLANS.find(p=>p.id===state.planId)||PLANS[0];
+    document.getElementById("dockKicker").textContent=plan.name+" · al mes";
+    document.getElementById("dockSub").textContent="Contrato de "+monthsLabel()+" · presencia "+label.toLowerCase()+" "+pct+"%";
+  }else{
+    document.getElementById("dockKicker").textContent="Inversión de este mes";
+    document.getElementById("dockSub").textContent="Presencia "+label.toLowerCase()+" · "+pct+"%";
+  }
+  const href=waHref();
+  document.getElementById("wa").href=href;
+  document.getElementById("dockWa").href=href;
+}
+function render(){
+  document.getElementById("app").dataset.mode=state.mode;
+  if(state.planId)document.getElementById("app").dataset.plan=state.planId;
+  else delete document.getElementById("app").dataset.plan;
+  renderMix();
+  renderPresence();
+  renderBenefits();
+  renderQuote();
+  renderNudge();
+  renderRecommend();
+  renderPlans();
+  renderDock();
+}
+
+document.getElementById("reelsDec").addEventListener("click",()=>{if(setQty("reels",state.reels-1))render()});
+document.getElementById("reelsInc").addEventListener("click",()=>{if(setQty("reels",state.reels+1))render()});
+document.getElementById("graphicsDec").addEventListener("click",()=>{if(setQty("graphics",state.graphics-1))render()});
+document.getElementById("graphicsInc").addEventListener("click",()=>{if(setQty("graphics",state.graphics+1))render()});
+document.getElementById("estrategia").addEventListener("click",()=>{
+  if(state.mode==="plan")return;
+  state.estrategia=!state.estrategia;
+  render();
+});
+function bindQty(id,key){
+  const el=document.getElementById(id);
+  el.addEventListener("input",()=>{
+    if(el.value==="")return;
+    const v=clamp(el.value,0,LIMITS[key]);
+    if(+el.value>LIMITS[key]||+el.value<0)el.value=String(v);
+    if(setQty(key,v))render();
+  });
+  el.addEventListener("blur",()=>{el.value=String(state[key])});
+  el.addEventListener("wheel",e=>{if(document.activeElement===el)e.preventDefault()},{passive:false});
+}
+bindQty("reels","reels");
+bindQty("graphics","graphics");
+document.getElementById("client").addEventListener("input",e=>{state.client=e.target.value;render()});
+document.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-act]");
+  if(!btn)return;
+  if(btn.dataset.act==="try4"){if(state.mode==="plan")leavePlanKeepQty();state.reels=4;render();return}
+  if(btn.dataset.act==="choose"){choosePlan(btn.dataset.plan);return}
+  if(btn.dataset.act==="back"){backToSuelto();return}
+});
+window.addEventListener("storage",e=>{
+  if(e.key==="kodaTarifas"){C=loadRates();render()}
+});
+render();
+</script>
+</body>
+</html>
